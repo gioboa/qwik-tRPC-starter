@@ -21,10 +21,16 @@ export default component$(() => {
             value={itemsResource}
             onPending={() => <>Loading...</>}
             onRejected={(error) => <>Error: {error.message}</>}
-            onResolved={(resp) => (
+            onResolved={(items) => (
                 <div>
-                    trpcResponse:
-                    {resp}
+                    Records:
+                    {items.map((item) => (
+                        <>
+                            <div>Id: {item.id}</div>
+                            <div>Name: {item.name}</div>
+                            <hr />
+                        </>
+                    ))}
                 </div>
             )}
         />
