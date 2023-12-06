@@ -1,32 +1,25 @@
 /* eslint-disable no-console */
-import { component$, Resource, useResource$ } from '@builder.io/qwik';
-import { Framework } from '@prisma/client';
+import { component$ } from '@builder.io/qwik';
+import { routeLoader$ } from '@builder.io/qwik-city';
 import { tServer } from '~/server/router';
 
-export default component$(() => {
-	const itemsResource = useResource$<Framework[]>(() => getFrameworks());
-
-	return (
-		<Resource
-			value={itemsResource}
-			onPending={() => <>Loading...</>}
-			onRejected={(error) => <>Error: {error.message}</>}
-			onResolved={(items: Framework[]) => (
-				<div>
-					Records:
-					{items.map((item) => (
-						<>
-							<div>Id: {item.id}</div>
-							<div>Name: {item.name}</div>
-							<hr />
-						</>
-					))}
-				</div>
-			)}
-		/>
-	);
+export const useFrameworks = routeLoader$(async () => {
+	return await tServer.framework.list('');
 });
 
-export async function getFrameworks(): Promise<Framework[]> {
-	return await tServer.framework.list('');
-}
+export default component$(() => {
+	const frameworksSig = useFrameworks();
+
+	return (
+		<div>
+			Records:
+			{frameworksSig.value.map((framework) => (
+				<>
+					<div>Id: {framework.id}</div>
+					<div>Name: {framework.name}</div>
+					<hr />
+				</>
+			))}
+		</div>
+	);
+});
