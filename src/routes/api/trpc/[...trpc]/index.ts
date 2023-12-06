@@ -6,7 +6,6 @@ import { appRouter } from '../../../../server/router/index';
 
 export const onRequest: RequestHandler = async ({ request, params, json }) => {
 	try {
-		console.log('-----');
 		const httpResponse = await resolveHTTPResponse({
 			router: appRouter,
 			path: params.trpc,
