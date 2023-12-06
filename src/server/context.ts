@@ -1,7 +1,9 @@
-import { PrismaClient } from '@prisma/client';
 import * as trpc from '@trpc/server';
 
 export const createContext = async () => {
+
+	const {PrismaClient} = await import('@prisma/client')
+
 	return {
 		prisma: new PrismaClient({
 			log: import.meta.env.DEV ? ['query', 'error', 'warn'] : ['error'],
